@@ -751,8 +751,6 @@ label.style-4 {
     color: var(--accent);
   }
 }
-<<<<<<< HEAD
-=======
 .bookmark-name {
   color: var(--accent);
   margin-left: 5px;
@@ -769,5 +767,4 @@ label.style-4 {
     margin-left: 1rem;
   }
 }
->>>>>>> Add public bookmark functionality
 </style>
