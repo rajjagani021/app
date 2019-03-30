@@ -118,7 +118,12 @@
         v-model="bookmarkTitle"
         @cancel="cancelBookmark"
         @confirm="saveBookmark"
-      />
+      >
+        <div class="create-bookmark-toggle" v-if="isUserAdmin">
+          <v-toggle :value="bookmarkIsPublic" @input="togglePublicBookmark" />
+          <span>Visible for all users</span>
+        </div>
+      </v-prompt>
     </portal>
   </div>
 </template>
@@ -151,11 +156,15 @@ export default {
 
       bookmarkModal: false,
       bookmarkTitle: "",
+      bookmarkIsPublic: false,
 
       notFound: false
     };
   },
   computed: {
+    isUserAdmin() {
+      return this.$store.state.currentUser.admin;
+    },
     activity() {
       return this.collection === "directus_activity";
     },
@@ -470,6 +479,9 @@ export default {
       this.bookmarkTitle = "";
       this.bookmarkModal = false;
     },
+    togglePublicBookmark() {
+      this.bookmarkIsPublic = !this.bookmarkIsPublic;
+    },
     setViewQuery(query) {
       const newViewQuery = {
         ...this.preferences.view_query,
@@ -589,10 +601,12 @@ export default {
     },
     saveBookmark() {
       const preferences = { ...this.preferences };
-      preferences.user = this.$store.state.currentUser.id;
       preferences.title = this.bookmarkTitle;
       delete preferences.id;
       delete preferences.role;
+      if (this.bookmarkIsPublic) {
+        delete preferences.user;
+      }
       if (!preferences.collection) {
         preferences.collection = this.collection;
       }
@@ -734,5 +748,12 @@ label.style-4 {
   line-height: 1.1;
   font-weight: 700;
   text-transform: uppercase;
+}
+.create-bookmark-toggle {
+  margin-top: 2rem;
+  display: flex;
+  span {
+    margin-left: 1rem;
+  }
 }
 </style>
