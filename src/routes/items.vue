@@ -121,7 +121,7 @@
       >
         <div class="create-bookmark-toggle" v-if="isUserAdmin">
           <v-toggle :value="bookmarkIsPublic" @input="togglePublicBookmark" />
-          <span>Visible for all users</span>
+          <span>{{ $t("visible_all_users") }}</span>
         </div>
       </v-prompt>
     </portal>
